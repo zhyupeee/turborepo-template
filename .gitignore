@@ -6,14 +6,22 @@ node_modules
 .pnp.js
 
 # Local env files
+# 忽略所有环境配置文件（包含敏感信息）
 .env
 .env.local
+.env.development
+.env.test
+.env.production
 .env.development.local
 .env.test.local
 .env.production.local
 
+# 但保留示例文件
+!.env.example
+
 # Testing
 coverage
+.nyc_output/
 
 # Turbo
 .turbo
@@ -27,12 +35,83 @@ out/
 build
 dist
 
+# Nestia 生成的文件
+swagger.json
+src/api/
+
+# TanStack Router 自动生成的文件
+routeTree.gen.ts
+
+# TypeScript 增量编译
+*.tsbuildinfo
 
 # Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+*.swp
+*.swo
+
+# ESLint
+.eslintcache
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
 # Misc
-.DS_Store
 *.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# Node.js REPL 历史
+.node_repl_history
+
+# 测试框架缓存
+.vitest/
+.jest-cache/
+
+# 通用缓存目录
+.cache/
+.temp/
+*.tmp
+*.temp
+
+# pnpm 全局存储
+.pnpm-store/
+
+# macOS 额外文件
+.Spotlight-V100
+.Trashes
+
+# Linux 备份文件
+*~
+
+# Windows 堆栈转储
+*.stackdump
+
+# 日志目录
+logs/
+
+# 锁文件备份
+package-lock.json.bak
+yarn.lock.bak
+pnpm-lock.yaml.bak
+

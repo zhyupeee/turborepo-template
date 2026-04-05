@@ -1,159 +1,140 @@
-# Turborepo starter
+# Turing Lab Platform
 
-This Turborepo starter is maintained by the Turborepo core team.
+基于 Turborepo 的全栈 Monorepo 项目
 
-## Using this example
+## 技术栈
 
-Run the following command:
+### 前端 (apps/web)
+- **React 19** - UI 框架
+- **Next.js 16** - React 框架
+- **Tailwind CSS 4** - 样式方案
+- **Axios** - HTTP 客户端
+- **Zustand** - 状态管理
 
-```sh
-npx create-turbo@latest
+### 后端 (apps/backend)
+- **NestJS 11** - Node.js 框架
+- **TypeORM** - ORM
+- **MySQL** - 数据库
+- **Nestia** - 类型安全的 API 开发
+
+### 共享包
+- **@repo/shared** - 共享类型和常量
+- **@repo/ui** - 共享 UI 组件
+- **@repo/eslint-config** - ESLint 配置
+- **@repo/typescript-config** - TypeScript 配置
+
+## 项目结构
+
+```
+turing-lab-platform/
+├── apps/
+│   ├── web/              # 前端应用 (Next.js)
+│   │   ├── app/          # Next.js App Router
+│   │   ├── lib/          # 工具库 (API客户端, 工具函数)
+│   │   ├── store/        # Zustand 状态管理
+│   │   └── types/        # TypeScript 类型定义
+│   └── backend/          # 后端应用 (NestJS)
+│       └── src/
+│           ├── modules/  # 业务模块
+│           └── main.ts   # 入口文件
+├── packages/
+│   ├── shared/           # 共享类型和常量
+│   ├── ui/               # 共享 UI 组件
+│   ├── eslint-config/    # ESLint 配置
+│   └── typescript-config/# TypeScript 配置
+├── turbo.json            # Turborepo 配置
+└── pnpm-workspace.yaml   # pnpm workspace 配置
 ```
 
-## What's inside?
+## 快速开始
 
-This Turborepo includes the following packages/apps:
+### 1. 安装依赖
 
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo build
+```bash
+pnpm install
 ```
 
-Without global `turbo`, use your package manager:
+### 2. 配置环境变量
 
-```sh
-cd my-turborepo
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+#### 后端环境变量 (apps/backend/.env)
+```bash
+cp apps/backend/.env.example apps/backend/.env
+# 编辑 .env 文件，配置数据库连接信息
 ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo build --filter=docs
+#### 前端环境变量 (apps/web/.env.local)
+```bash
+# 已创建，默认连接到 http://localhost:3001/api
 ```
 
-Without global `turbo`:
+### 3. 创建 MySQL 数据库
 
-```sh
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+```sql
+CREATE DATABASE turing_lab CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-### Develop
+### 4. 启动开发服务器
 
-To develop all apps and packages, run the following command:
+```bash
+# 同时启动前后端
+pnpm dev
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
+# 或分别启动
+pnpm dev --filter=web      # 只启动前端
+pnpm dev --filter=backend  # 只启动后端
 ```
 
-Without global `turbo`, use your package manager:
+### 5. 访问应用
 
-```sh
-cd my-turborepo
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+- 前端: http://localhost:3000
+- 后端 API: http://localhost:3001/api
+- API 健康检查: http://localhost:3001/api/health
+
+## 可用脚本
+
+```bash
+# 开发
+pnpm dev              # 启动所有应用的开发服务器
+
+# 构建
+pnpm build            # 构建所有应用和包
+
+# 代码检查
+pnpm lint             # 运行 ESLint
+pnpm check-types      # TypeScript 类型检查
+
+# 格式化
+pnpm format           # 使用 Prettier 格式化代码
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+## 数据库迁移
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+```bash
+# 生成迁移文件
+cd apps/backend
+pnpm migration:generate src/migrations/Init
 
-```sh
-turbo dev --filter=web
+# 运行迁移
+pnpm migration:run
+
+# 回滚迁移
+pnpm migration:revert
 ```
 
-Without global `turbo`:
+## Nestia API 文档
 
-```sh
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+```bash
+cd apps/backend
+pnpm nestia  # 生成 Swagger 文档和 SDK
 ```
 
-### Remote Caching
+## 开发规范
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+- 使用 TypeScript 严格模式
+- 遵循 ESLint 规则
+- 提交前运行 `pnpm lint` 和 `pnpm check-types`
+- 使用 Conventional Commits 规范
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+## License
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+MIT
