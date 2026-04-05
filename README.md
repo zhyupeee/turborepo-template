@@ -1,4 +1,4 @@
-# Turing Lab Platform
+# turborepo初始仓库模板
 
 基于 Turborepo 的全栈 Monorepo 项目
 
